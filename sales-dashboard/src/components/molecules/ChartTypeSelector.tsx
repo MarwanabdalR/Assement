@@ -8,7 +8,7 @@ interface ChartTypeSelectorProps {
   onTypeChange: (type: ChartType) => void;
 }
 
-export const ChartTypeSelector: React.FC<ChartTypeSelectorProps> = ({
+const ChartTypeSelectorComponent: React.FC<ChartTypeSelectorProps> = ({
   selectedType,
   onTypeChange,
 }) => {
@@ -19,13 +19,15 @@ export const ChartTypeSelector: React.FC<ChartTypeSelectorProps> = ({
   ];
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2" role="group" aria-label="Select chart type">
       {chartTypes.map(({ type, label }) => (
         <Button
           key={type}
           onClick={() => onTypeChange(type)}
           variant={selectedType === type ? 'primary' : 'outline'}
           size="sm"
+          className="whitespace-nowrap"
+          aria-pressed={selectedType === type}
         >
           {label}
         </Button>
@@ -33,3 +35,5 @@ export const ChartTypeSelector: React.FC<ChartTypeSelectorProps> = ({
     </div>
   );
 };
+
+export const ChartTypeSelector = React.memo(ChartTypeSelectorComponent);

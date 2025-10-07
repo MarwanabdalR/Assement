@@ -7,19 +7,20 @@ interface YearSelectorProps {
   availableYears: number[];
 }
 
-export const YearSelector: React.FC<YearSelectorProps> = ({
+const YearSelectorComponent: React.FC<YearSelectorProps> = ({
   selectedYear,
   onYearChange,
   availableYears,
 }) => {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2" role="group" aria-label="Select year">
       {availableYears.map((year) => (
         <Button
           key={year}
           onClick={() => onYearChange(year)}
           variant={selectedYear === year ? 'primary' : 'outline'}
           size="sm"
+          aria-pressed={selectedYear === year}
         >
           {year}
         </Button>
@@ -27,3 +28,5 @@ export const YearSelector: React.FC<YearSelectorProps> = ({
     </div>
   );
 };
+
+export const YearSelector = React.memo(YearSelectorComponent);

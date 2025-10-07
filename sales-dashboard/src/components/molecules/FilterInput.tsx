@@ -16,8 +16,8 @@ export const FilterInput: React.FC<FilterInputProps> = ({
   onResetFilter,
 }) => {
   return (
-    <div className="flex items-end gap-4 p-4 bg-gray-50 rounded-lg">
-      <div className="flex-1">
+    <div className="flex flex-col md:flex-row md:items-end gap-4 p-4 bg-gray-50 rounded-lg">
+      <div className="md:flex-1">
         <Input
           type="number"
           label="Sales Threshold"
@@ -26,10 +26,10 @@ export const FilterInput: React.FC<FilterInputProps> = ({
           onChange={(value) => onThresholdChange(Number(value) || 0)}
         />
       </div>
-      <Button onClick={onApplyFilter} variant="primary">
+      <Button onClick={onApplyFilter} variant="primary" className="w-full md:w-auto">
         Apply Filter
       </Button>
-      <Button onClick={onResetFilter} variant="outline">
+      <Button onClick={onResetFilter} variant="outline" className="w-full md:w-auto">
         Reset
       </Button>
     </div>

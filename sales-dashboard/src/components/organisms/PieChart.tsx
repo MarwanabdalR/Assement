@@ -7,7 +7,7 @@ interface PieChartProps {
   threshold?: number;
 }
 
-export const PieChart: React.FC<PieChartProps> = ({ data, threshold = 0 }) => {
+const PieChartComponent: React.FC<PieChartProps> = ({ data, threshold = 0 }) => {
   const filteredData = data.filter(item => item.sales >= threshold);
   
   const formatCurrency = (value: number) => {
@@ -30,7 +30,7 @@ export const PieChart: React.FC<PieChartProps> = ({ data, threshold = 0 }) => {
   }));
 
   return (
-    <div className="w-full h-96">
+    <div className="w-full h-64 sm:h-72 md:h-80 lg:h-96" role="img" aria-label="Pie chart of sales distribution by month">
       <ResponsiveContainer width="100%" height="100%">
         <RechartsPieChart>
           <Pie
@@ -53,3 +53,5 @@ export const PieChart: React.FC<PieChartProps> = ({ data, threshold = 0 }) => {
     </div>
   );
 };
+
+export const PieChart = React.memo(PieChartComponent);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 
 interface InputProps {
   type?: 'text' | 'number' | 'email' | 'password';
@@ -9,6 +9,7 @@ interface InputProps {
   error?: string;
   disabled?: boolean;
   className?: string;
+  id?: string;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -20,20 +21,28 @@ export const Input: React.FC<InputProps> = ({
   error,
   disabled = false,
   className = '',
+  id,
 }) => {
+  const autoId = useId();
+  const inputId = id || autoId;
+  const errorId = `${inputId}-error`;
+
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor={inputId} className="block text-sm font-medium text-gray-700 mb-1">
           {label}
         </label>
       )}
       <input
+        id={inputId}
         type={type}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
         disabled={disabled}
+        aria-invalid={!!error}
+        aria-describedby={error ? errorId : undefined}
         className={`
           w-full px-3 py-2 border border-gray-300 rounded-lg
           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
@@ -43,7 +52,7 @@ export const Input: React.FC<InputProps> = ({
         `}
       />
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p id={errorId} className="mt-1 text-sm text-red-600">{error}</p>
       )}
     </div>
   );

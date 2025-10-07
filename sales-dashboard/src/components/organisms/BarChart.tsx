@@ -7,7 +7,7 @@ interface BarChartProps {
   threshold?: number;
 }
 
-export const BarChart: React.FC<BarChartProps> = ({ data, threshold = 0 }) => {
+const BarChartComponent: React.FC<BarChartProps> = ({ data, threshold = 0 }) => {
   const filteredData = data.filter(item => item.sales >= threshold);
   
   const formatCurrency = (value: number) => {
@@ -19,7 +19,7 @@ export const BarChart: React.FC<BarChartProps> = ({ data, threshold = 0 }) => {
   };
 
   return (
-    <div className="w-full h-96">
+    <div className="w-full h-64 sm:h-72 md:h-80 lg:h-96" role="img" aria-label="Bar chart of sales by month">
       <ResponsiveContainer width="100%" height="100%">
         <RechartsBarChart data={filteredData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -35,3 +35,5 @@ export const BarChart: React.FC<BarChartProps> = ({ data, threshold = 0 }) => {
     </div>
   );
 };
+
+export const BarChart = React.memo(BarChartComponent);

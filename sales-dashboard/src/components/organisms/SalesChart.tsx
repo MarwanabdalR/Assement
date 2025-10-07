@@ -11,7 +11,7 @@ interface SalesChartProps {
   threshold?: number;
 }
 
-export const SalesChart: React.FC<SalesChartProps> = ({ 
+const SalesChartComponent: React.FC<SalesChartProps> = ({ 
   data, 
   chartType, 
   threshold = 0 
@@ -30,8 +30,10 @@ export const SalesChart: React.FC<SalesChartProps> = ({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full" role="img" aria-label={`Sales ${chartType} chart`}>
       {renderChart()}
     </div>
   );
 };
+
+export const SalesChart = React.memo(SalesChartComponent);

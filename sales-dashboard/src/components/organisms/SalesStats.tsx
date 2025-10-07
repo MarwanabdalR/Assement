@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card } from '../atoms/Card';
 import { SalesData } from '@/data/mockData';
 import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
@@ -9,12 +9,18 @@ interface SalesStatsProps {
 }
 
 export const SalesStats: React.FC<SalesStatsProps> = ({ data, threshold = 0 }) => {
-  const filteredData = data.filter(item => item.sales >= threshold);
-  
-  const totalSales = filteredData.reduce((sum, item) => sum + item.sales, 0);
-  const averageSales = filteredData.length > 0 ? totalSales / filteredData.length : 0;
-  const maxSales = Math.max(...filteredData.map(item => item.sales));
-  const minSales = Math.min(...filteredData.map(item => item.sales));
+  const filteredData = useMemo(() => data.filter(item => item.sales >= threshold), [data, threshold]);
+
+  const { totalSales, averageSales, maxSales, minSales } = useMemo(() => {
+    if (filteredData.length === 0) {
+      return { totalSales: 0, averageSales: 0, maxSales: 0, minSales: 0 };
+    }
+    const total = filteredData.reduce((sum, item) => sum + item.sales, 0);
+    const avg = total / filteredData.length;
+    const max = Math.max(...filteredData.map(item => item.sales));
+    const min = Math.min(...filteredData.map(item => item.sales));
+    return { totalSales: total, averageSales: avg, maxSales: max, minSales: min };
+  }, [filteredData]);
   
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -56,14 +62,14 @@ export const SalesStats: React.FC<SalesStatsProps> = ({ data, threshold = 0 }) =
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" aria-live="polite">
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         return (
-          <Card key={index} className="p-4">
-            <div className="flex items-center">
+          <Card key={index} className="p-4" title={stat.title}>
+            <div className="flex items-center" aria-label={`${stat.title}: ${stat.value}`}>
               <div className={`p-3 rounded-lg ${stat.bgColor}`}>
-                <Icon className={`h-6 w-6 ${stat.color}`} />
+                <Icon className={`h-6 w-6 ${stat.color}`} aria-hidden="true" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">{stat.title}</p>
